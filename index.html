@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Partner Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --dark: #0D1117;
+    --blue: #0066CC;
+    --cyan: #00A8E8;
+    --teal: #00C4B4;
+    --white: #F5F8FF;
+    --muted: #8A9AB5;
+    --card: #111827;
+    --border: rgba(0,168,232,0.15);
+    --grad: linear-gradient(135deg, #00A8E8, #00C4B4);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body {
+    background:var(--dark); color:var(--white);
+    font-family:'DM Sans',sans-serif; font-weight:300;
+    min-height:100vh; overflow-x:hidden;
+  }
+  body::before {
+    content:''; position:fixed; inset:0;
+    background:
+      radial-gradient(ellipse 80% 50% at 10% 0%, rgba(0,102,204,0.16) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 90% 80%, rgba(0,196,180,0.10) 0%, transparent 55%);
+    pointer-events:none; z-index:0;
+  }
+  .container { max-width:1100px; margin:0 auto; padding:0 24px; position:relative; z-index:1; }
+
+  /* HEADER */
+  header {
+    position:sticky; top:0; z-index:200;
+    background:rgba(13,17,23,0.95);
+    backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
+    border-bottom:1px solid rgba(0,168,232,0.12);
+  }
+  .header-top {
+    display:flex; align-items:center; justify-content:space-between;
+    padding:20px 0 0; gap:12px; flex-wrap:wrap;
+  }
+  .logo-area { display:flex; align-items:center; gap:12px; }
+  .logo-mark {
+    width:36px; height:36px; background:var(--grad);
+    border-radius:9px; display:flex; align-items:center; justify-content:center;
+    font-family:'Syne',sans-serif; font-weight:800; font-size:16px; color:#fff; flex-shrink:0;
+  }
+  .logo-text { font-family:'Syne',sans-serif; font-weight:800; font-size:1.2rem; letter-spacing:-0.01em; }
+  .logo-text span { color:var(--cyan); }
+  .header-meta { font-size:0.75rem; color:var(--muted); text-align:right; line-height:1.5; }
+
+  /* TAB NAV */
+  .tab-nav { display:flex; gap:0; margin-top:16px; overflow-x:auto; scrollbar-width:none; }
+  .tab-nav::-webkit-scrollbar { display:none; }
+  .tab-btn {
+    display:flex; align-items:center; gap:7px;
+    padding:12px 20px;
+    font-family:'DM Sans',sans-serif; font-size:0.82rem; font-weight:400;
+    color:var(--muted); background:transparent;
+    border:none; border-bottom:2px solid transparent;
+    cursor:pointer; white-space:nowrap; transition:all 0.2s;
+  }
+  .tab-btn:hover { color:var(--white); }
+  .tab-btn.active { color:var(--cyan); border-bottom-color:var(--cyan); font-weight:500; }
+  .tab-icon { font-size:14px; }
+
+  /* PANELS */
+  .tab-panel { display:none; padding:40px 0 64px; }
+  .tab-panel.active { display:block; }
+
+  /* PANEL HERO */
+  .panel-hero { margin-bottom:36px; }
+  .eyebrow {
+    display:inline-block; font-size:0.68rem; font-weight:500;
+    letter-spacing:0.18em; text-transform:uppercase; color:var(--cyan);
+    background:rgba(0,168,232,0.09); border:1px solid rgba(0,168,232,0.22);
+    border-radius:100px; padding:3px 12px; margin-bottom:14px;
+  }
+  .panel-hero h2 {
+    font-family:'Syne',sans-serif;
+    font-size:clamp(1.5rem,4vw,2.3rem); font-weight:800;
+    line-height:1.1; letter-spacing:-0.02em; margin-bottom:10px;
+  }
+  .panel-hero h2 em {
+    font-style:normal; background:var(--grad);
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  }
+  .panel-hero p { font-size:0.87rem; color:var(--muted); max-width:560px; line-height:1.7; }
+
+  /* SECTIONS */
+  .section { margin-bottom:44px; }
+  .section-header { display:flex; align-items:center; gap:10px; margin-bottom:16px; }
+  .s-icon {
+    width:30px; height:30px; border-radius:7px;
+    display:flex; align-items:center; justify-content:center; font-size:14px; flex-shrink:0;
+  }
+  .s-title { font-family:'Syne',sans-serif; font-size:0.9rem; font-weight:700; }
+  .s-rule { flex:1; height:1px; background:linear-gradient(90deg,rgba(0,168,232,0.18) 0%,transparent 100%); }
+
+  /* GRIDS */
+  .grid { display:grid; gap:12px; }
+  .g2 { grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); }
+  .g3 { grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); }
+  .g4 { grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); }
+
+  /* LINK CARDS */
+  .card {
+    display:block; text-decoration:none;
+    background:var(--card); border:1px solid var(--border);
+    border-radius:11px; padding:16px 18px;
+    transition:all 0.2s; position:relative; overflow:hidden;
+  }
+  .card::before {
+    content:''; position:absolute; top:0; left:0;
+    width:3px; height:100%; background:var(--grad); opacity:0; transition:opacity 0.2s;
+  }
+  .card:hover { border-color:rgba(0,168,232,0.35); transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,0.28); }
+  .card:hover::before { opacity:1; }
+  .card-title { font-family:'Syne',sans-serif; font-size:0.85rem; font-weight:600; color:var(--white); margin-bottom:5px; line-height:1.3; padding-right:18px; }
+  .card-desc { font-size:0.75rem; color:var(--muted); line-height:1.5; }
+  .card-tag { display:inline-block; margin-top:9px; font-size:0.65rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--cyan); font-weight:500; }
+  .card-tag.teal { color:var(--teal); }
+  .card-tag.orange { color:#f59e42; }
+  .arr { position:absolute; top:15px; right:14px; font-size:13px; color:var(--muted); transition:all 0.2s; }
+  .card:hover .arr { color:var(--cyan); transform:translate(2px,-2px); }
+
+  /* STATIC CARD (no hover) */
+  .card-static {
+    background:var(--card); border:1px solid var(--border);
+    border-radius:11px; padding:16px 18px;
+  }
+  .card-static .card-title { font-family:'Syne',sans-serif; font-size:0.85rem; font-weight:600; color:var(--white); margin-bottom:6px; }
+  .card-static .card-desc { font-size:0.75rem; color:var(--muted); line-height:1.7; }
+  .card-static a { color:var(--cyan); text-decoration:none; }
+
+  /* COMPETE BANNER */
+  .compete-banner {
+    background:linear-gradient(135deg,rgba(0,102,204,0.14),rgba(0,196,180,0.09));
+    border:1px solid rgba(0,168,232,0.22); border-radius:14px;
+    padding:26px 28px; margin-bottom:18px; position:relative; overflow:hidden;
+  }
+  .compete-banner::after {
+    content:''; position:absolute; top:-50px; right:-50px;
+    width:180px; height:180px;
+    background:radial-gradient(circle,rgba(0,196,180,0.13) 0%,transparent 70%); pointer-events:none;
+  }
+  .compete-banner h3 { font-family:'Syne',sans-serif; font-size:1.1rem; font-weight:800; margin-bottom:8px; }
+  .compete-banner p { font-size:0.82rem; color:var(--muted); max-width:660px; line-height:1.7; margin-bottom:14px; }
+  .grad-text { background:var(--grad); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .margin-badge {
+    display:inline-flex; align-items:center; gap:8px;
+    font-size:0.8rem; font-weight:500; color:var(--white);
+    background:rgba(0,196,180,0.13); border:1px solid rgba(0,196,180,0.32);
+    border-radius:8px; padding:7px 13px; margin-bottom:10px;
+  }
+  .margin-badge strong { color:var(--teal); }
+  .code-block {
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:'Courier New',monospace; font-size:0.8rem; color:var(--teal);
+    background:rgba(0,196,180,0.07); border:1px solid rgba(0,196,180,0.22);
+    border-radius:7px; padding:7px 13px; cursor:pointer; user-select:all;
+  }
+
+  /* CONTACT CARDS */
+  .contact-card {
+    background:var(--card); border:1px solid var(--border);
+    border-radius:11px; padding:15px 17px;
+    display:flex; flex-direction:column; gap:4px;
+  }
+  .contact-role { font-size:0.68rem; letter-spacing:0.09em; text-transform:uppercase; color:var(--cyan); font-weight:500; }
+  .contact-email { font-family:'Syne',sans-serif; font-size:0.82rem; font-weight:600; color:var(--white); }
+  .contact-email a { color:inherit; text-decoration:none; transition:color 0.2s; }
+  .contact-email a:hover { color:var(--cyan); }
+  .contact-note { font-size:0.71rem; color:var(--muted); line-height:1.45; }
+
+  /* DIST BAR */
+  .dist-bar { margin-top:14px; padding:15px 18px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); border-radius:11px; }
+  .dist-label { font-size:0.68rem; font-weight:600; letter-spacing:0.09em; text-transform:uppercase; color:var(--muted); margin-bottom:10px; }
+  .dist-items { display:flex; gap:24px; flex-wrap:wrap; }
+  .dist-items span { font-size:0.8rem; }
+  .dist-items a { color:var(--cyan); text-decoration:none; }
+
+  /* INLINE NOTE */
+  .note {
+    font-size:0.75rem; color:var(--muted);
+    padding:11px 15px; background:rgba(0,196,180,0.05);
+    border:1px solid rgba(0,196,180,0.18);
+    border-radius:8px; margin-top:10px; line-height:1.55;
+  }
+  .note a { color:var(--cyan); text-decoration:none; }
+  .note strong { color:var(--white); }
+
+  /* SUB LABEL */
+  .sub-label { font-family:'Syne',sans-serif; font-size:0.74rem; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); margin:22px 0 12px; }
+
+  /* STUDIO TABLE */
+  .studio-wrap { background:var(--card); border:1px solid var(--border); border-radius:11px; overflow:hidden; }
+  .studio-note { padding:12px 18px; border-bottom:1px solid rgba(255,255,255,0.05); font-size:0.73rem; color:var(--muted); }
+  .studio-note a { color:var(--cyan); text-decoration:none; }
+  .studio-table { width:100%; border-collapse:collapse; font-size:0.79rem; }
+  .studio-table th { font-family:'Syne',sans-serif; font-size:0.65rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); font-weight:600; text-align:left; padding:8px 14px; border-bottom:1px solid rgba(255,255,255,0.06); }
+  .studio-table td { padding:10px 14px; border-bottom:1px solid rgba(255,255,255,0.04); color:#b0bec5; vertical-align:top; }
+  .studio-table tr:last-child td { border-bottom:none; }
+  .studio-table td:first-child { color:var(--cyan); font-weight:500; white-space:nowrap; }
+  .studio-table a { color:var(--white); text-decoration:none; transition:color 0.2s; }
+  .studio-table a:hover { color:var(--cyan); }
+
+  /* FW CARD */
+  .fw-card {
+    display:flex; align-items:center; justify-content:space-between;
+    gap:12px; flex-wrap:wrap; text-decoration:none; color:var(--white);
+    background:var(--card); border:1px solid var(--border);
+    border-radius:11px; padding:16px 20px; margin-top:10px; transition:all 0.2s;
+  }
+  .fw-card:hover { border-color:rgba(0,168,232,0.35); }
+  .fw-title { font-family:'Syne',sans-serif; font-size:0.88rem; font-weight:600; }
+  .fw-desc { font-size:0.73rem; color:var(--muted); margin-top:2px; }
+  .fw-go { font-size:0.75rem; color:var(--cyan); font-weight:500; white-space:nowrap; }
+
+  /* FOOTER */
+  footer { border-top:1px solid rgba(255,255,255,0.06); padding:24px 0; }
+  .footer-inner { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; }
+  .footer-note { font-size:0.72rem; color:var(--muted); }
+  .footer-links { display:flex; gap:18px; }
+  .footer-links a { font-size:0.72rem; color:var(--muted); text-decoration:none; transition:color 0.2s; }
+  .footer-links a:hover { color:var(--cyan); }
+
+  .fade-in { animation:fadeUp 0.35s ease both; }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:none; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <div class="header-top">
+      <div class="logo-area">
+        <div class="logo-mark">P</div>
+        <div class="logo-text">Partner <span>Hub</span></div>
+      </div>
+
+    </div>
+    <nav class="tab-nav">
+      <button class="tab-btn active" data-tab="sales">
+        <span class="tab-icon">📊</span> Partner Sales Resources
+      </button>
+      <button class="tab-btn" data-tab="program">
+        <span class="tab-icon">🤝</span> Partner Program
+      </button>
+      <button class="tab-btn" data-tab="support">
+        <span class="tab-icon">📞</span> Partner &amp; Customer Support
+      </button>
+      <button class="tab-btn" data-tab="education">
+        <span class="tab-icon">🎓</span> Solution &amp; Sales Education
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main>
+<div class="container">
+
+
+<!-- ══════════════════════════════════════
+     TAB 1 · PARTNER SALES RESOURCES
+══════════════════════════════════════ -->
+<div id="tab-sales" class="tab-panel active fade-in">
+
+  <div class="panel-hero">
+    <div class="eyebrow">Partner Sales Resources</div>
+    <h2>Quoting, deal reg, and <em>winning the opportunity</em></h2>
+    <p>Everything you need to price, register, and close — from the first quote to protected margin on legacy VDI modernization plays.</p>
+  </div>
+
+  <!-- Quoting -->
+  <div class="section">
+    <div class="section-header">
+      <div class="s-icon" style="background:rgba(0,168,232,0.12)">💰</div>
+      <div class="s-title">Quoting &amp; Ordering</div>
+      <div class="s-rule"></div>
+    </div>
+    <div class="grid g2">
+      <a href="https://omnissa.my.site.com/partnerconnect/s/partner-connect" target="_blank" class="card">
+        <span class="arr">↗</span>
+        <div class="card-title">Partner Connect — Home</div>
+        <div class="card-desc">Start here for all partner activities</div>
+        <span class="card-tag">Portal Login Required</span>
+      </a>
+      <a href="https://omnissa.my.site.com/partnerconnect/s/pricing" target="_blank" class="card">
+        <span class="arr">↗</span>
+        <div class="card-title">Channel &amp; MSP Price List</div>
+        <div class="card-desc">Current product pricing for resellers and MSPs</div>
+        <span class="card-tag">Portal Login Required</span>
+      </a>
+      <a href="https://customerconnect.omnissa.com/web/sdppartner/sdpconfigurator" target="_blank" class="card">
+        <span class="arr">↗</span>
+        <div class="card-title">Subscription Configurator</div>
+        <div class="card-desc">Build and price subscription service configurations</div>
+        <span class="card-tag">Portal Login Required</span>
+      </a>
+      <a href="https://customerconnect.omnissa.com/web/sdppartner/sdpPartnerHome" target="_blank" class="card">
+        <span class="arr">↗</span>
+        <div class="card-title">Subscription Services Portal</div>
+        <div class="card-desc">View incumbent subscription customers, orders, renewals, and price lists</div>
+        <span class="card-tag">Portal Login Required</span>
+      </a>
+    </div>
+    <div class="dist-bar">
+      <div class="dist-label">Distribution Quoting Desks</div>
+      <div class="dist-items">
+        <span>📦 Ingram Micro — <a href="/cdn-cgi/l/email-protection#97d8faf9fee4e4f6d7fef9f0e5f6fafafef4e5f8b9f4f8fa"><span class="__cf_email__" data-cfemail="d49bb9babda7a7b594bdbab3a6b5b9b9bdb7a6bbfab7bbb9">[email&#160;protected]</span></a></span>
+        <span>📦 TD Synnex — <a href="/cdn-cgi/l/email-protection#2d624043445e5e4c6d59495e5443434855034e4240"><span class="__cf_email__" data-cfemail="f1be9c9f98828290b1859582889f9f9489df929e9c">[email&#160;protected]</span></a></span>
+        <span>📦 Carahsoft — <a href="/cdn-cgi/l/email-protection#17587a797e64647657547665767f647871633974787a"><span class="__cf_email__" data-cfemail="5d123033342e2e3c1d1e3c2f3c352e323b29733e3230">[email&#160;protected]</span></a></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Renewals -->
+  <div class="section">
+    <div class="section-header">
+      <div class="s-icon" style="background:rgba(0,196,180,0.12)">🔄</div>
+      <div class="s-title">Renewals</div>
+      <div class="s-rule"></div>
+    </div>
+    <div class="grid g2">
+      <div class="card-static">
+        <div class="card-title">Renewals DL — <a href="/cdn-cgi/l/email-protection#493b2c272c3e28253a09262427203a3a28672a2624"><span class="__cf_email__" data-cfemail="0e7c6b606b796f627d4e616360677d7d6f206d6163">[email&#160;protected]</span></a></div>
+        <div class="card-desc">
+          Include with every request:<br>
+          Customer Name &nbsp;·&nbsp; SID or Contract # &nbsp;·&nbsp; EA Number &nbsp;·&nbsp; Support Dates Requested &nbsp;·&nbsp; Product SKU &amp; QTY &nbsp;·&nbsp; Partner Contact Info
+        </div>
+      </div>
+      <a href="https://omnissa.my.site.com/partnerconnect/s/account-management?component=c%3APC_Ea_Lookup" target="_blank" class="card">
+        <span class="arr">↗</span>
+        <div class="card-title">EA Number Look-Up Tool</div>
+        <div class="card-desc">Find customer EA numbers before submitting renewal requests</div>
+        <span class="card-tag">Portal Login Required</span>
+      </a>
+      <a href="https://omnissa.my.site.com/partnerconnect/s/account-management?component=c%3APC_PartnerAnaltytics&reportName=Renewals" target="_blank" class="card">
+        <span class="arr">↗</span>
+        <div class="card-title">Business Insights — Renewal Dashboard</div>
+        <div class="card-desc">View upcoming renewals and identify upsell opportunities proactively</div>
+        <span class="card-tag">Portal Login Required</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Deal Reg -->
+  <div class="section">
+    <div class="section-header">
+      <div class="s-icon" style="background:rgba(0,102,204,0.15)">📋</div>
+      <div class="s-title">Deal Registration &amp; Incentives</div>
+      <div class="s-rule"></div>
+    </div>
+    <div class="grid g2">
+      <a href="https://omnissa.my.site.com/partnerconnect/s/opportunityregistration" target="_blank" class="card">
+        <span class="arr">↗</span>
+        <div class="card-title">Submit Deal Registration</div>
+        <div class="card-desc">Net new business only — no deal reg for renewals or incumbency</div>
+        <span class="card-tag">Portal Login Required</span>
+      </a>
+      <a href="https://omnissa.my.site.com/partnerconnect/s/account-management?component=c%3APC_DealRegView" target="_blank" class="card">
+        <span class="arr">↗</span>
+        <div class="card-title">Manage My Opportunities</div>
+        <div class="card-desc">View and manage your registered deal pipeline</div>
+        <span class="card-tag">Portal Login Required</span>
+      </a>
+      <a href="https://omnissa.my.site.com/partnerconnect/s/contentdocument/069Hp00000eZgGH" target="_blank" class="card">
+        <span class="arr">↗</span>
+        <div class="card-title">Discount Matrix</div>
+        <div class="card-desc">Product names and financial benefits by tier — know your margin before you quote</div>
+        <span class="card-tag">Portal Login Required</span>
+      </a>
+      <a href="https://omnissa.my.site.com/partnerconnect/s/assessment" target="_blank" class="card">
+        <span class="arr">↗</span>
+        <div class="card-title">Technical Assessment Incentive</div>
+        <div class="card-desc">Pre-sale incentive per qualified opportunity</div>
+        <span class="card-tag teal">Up to $10,000</span>
+      </a>
+      <a href="https://omnissa.my.site.com/partnerconnect/s/poc" target="_blank" class="card">
+        <span class="arr">↗</span>
+        <div class="card-title">Pilot Incentive</div>
+        <div class="card-desc">Post-sale incentive per qualified opportunity</div>
+        <span class="card-tag teal">Up to $12,000</span>
+      </a>
+    </div>
+    <div class="note">
+      💡 <strong>Pro tip:</strong> You can submit 1 TA claim and 1 Pilot claim for the same customer per Omnissa fiscal year. MSC Partners earn the highest tier — track via the <a href="https://omnissa.my.site.com/partnerconnect/s/account-management?component=c:PC_MSCDashboard" target="_blank">MSC Dashboard</a>.
+    </div>
+  </div>
+
+  <!-- Legacy VDI Switch -->
+  <div class="section">
+    <div class="section-header">
+      <div class="s-icon" style="background:rgba(0,168,232,0.12)">⚡</div>
+      <div class="s-title">Legacy VDI Modernization — Switch to Horizon</div>
+      <div class="s-rule"></div>
+    </div>
+
+    <div class="compete-banner">
+      <h3>Help customers <span class="grad-text">modernize their virtual desktops</span></h3>
+      <p>Many organizations running legacy VDI platforms are experiencing real friction — cost structure changes, slowing innovation, and support challenges are creating clear openings. Find those accounts, submit a deal reg with the code below, and engage the Omnissa AE to lead the conversation.</p>
+      <div class="margin-badge">💰 <strong>~2× Margin Protection</strong> on Legacy VDI Switch opportunities</div><br>
+      <div style="font-size:0.73rem;color:var(--muted);margin-bottom:6px;margin-top:4px;">Include this code when submitting your deal registration:</div>
+      <div class="code-block" title="Click to select and copy">[DealReg-FY26-WW-CTX-Compete-Partner]</div>
+    </div>
+
+    <div class="sub-label">Sales &amp; Customer-Facing Assets</div>
+    <div class="grid g2">
+      <a href="https://omnissa.link/4j3huHd" target="_blank" class="card">
+        <span class="arr">↗</span>
+        <div class="card-title">Solution Overview — Modernize Your VDI</div>
+        <div class="card-desc">One-pager on why Horizon is the right move — download and send to customer</div>
+        <span class="card-tag orange">Customer-Facing</span>
+      </a>
+      <a href="https://www.omnissa.com/legacy-vdi-to-horizon-infographic/" target="_blank" class="card">
+        <span class="arr">↗</span>
+        <div class="card-title">Legacy VDI → Horizon Infographic</div>
+        <div class="card-desc">Visual comparison — great for sparking the conversation with customers</div>
+        <span class="card-tag orange">Customer-Facing</span>
+      </a>
+      <a href="https://stwb.co/epsszuc" target="_blank" class="card">
+        <span class="arr">↗</span>
+        <div class="card-title">Make the Switch — E-Book</div>
+        <div class="card-desc">In-depth customer guide for evaluating the move to Horizon</div>
+        <span class="card-tag orange">Customer-Facing</span>
+      </a>
+      <a href="https://stwb.co/epsszur" target="_blank" class="card">
+        <span class="arr">↗</span>
+        <div class="card-title">Partner Cheat Sheet</div>
+        <div class="card-desc">Quick-reference for positioning Horizon vs legacy VDI platforms</div>
+        <span class="card-tag">Partner-Facing</span>
+      </a>
+      <a href="https://omnissa-my.sharepoint.com/:b:/p/crowleyda/ERVoY5TxvxtKpfzlOhakVPkBiexWFzKGOJeOyEhsBoD0xg?e=fJh2OB" target="_blank" class="card">
+        <span class="arr">↗</span>
+        <div class="card-title">Partner FAQ — Legacy VDI Switch</div>
+        <div class="card-desc">Common objections and Q&amp;A for the switch conversation</div>
+        <span class="card-tag">Portal Login Required</span>
+      </a>
+      <a href="https://omnissa-my.sharepoint.com/:p:/p/dlandry/EVLgnBCrLl5Dsbvo7w__hsAB6MOmxOudZ-gAMTKPPA31eQ?e=RfsOwp" target="_blank" class="card">
+        <span class="arr">↗</span>
+        <div class="card-title">Full Sales Playbook — Legacy VDI Replace</div>
+        <div class="card-desc">End-to-end playbook for driving legacy VDI displacement opportunities</div>
+        <span class="card-tag">Portal Login Required</span>
+      </a>
+    </div>
+
+    <div class="sub-label">Horizon Product Info</div>
+    <div class="grid g3">
+      <a href="https://www.omnissa.com/horizon-pricing-and-packaging-whitepaper/" target="_blank" class="card">
+        <span class="arr">↗</span>
+        <div class="card-title">Packaging &amp; Licensing Guide</div>
+        <div class="card-desc">Complete overview of Horizon editions and licensing models</div>
+      </a>
+      <a href="https://www.omnissa.com/omnissa-horizon-saas-matrix/" target="_blank" class="card">
+        <span class="arr">↗</span>
+        <div class="card-title">Horizon SaaS Comparison</div>
+        <div class="card-desc">Side-by-side SaaS edition feature comparison</div>
+      </a>
+      <a href="https://www.omnissa.com/horizon-subscription-term-editions/" target="_blank" class="card">
+        <span class="arr">↗</span>
+        <div class="card-title">Horizon Term Comparison</div>
+        <div class="card-desc">Term subscription editions compared</div>
+      </a>
+      <a href="https://techzone.omnissa.com/resource/horizon-8-frequently-asked-questions-faqs" target="_blank" class="card">
+        <span class="arr">↗</span>
+        <div class="card-title">Horizon 8 FAQ</div>
+        <div class="card-desc">Common questions on product features and deployment</div>
+      </a>
+      <a href="https://stwb.co/epsszsl" target="_blank" class="card">
+        <span class="arr">↗</span>
+        <div class="card-title">Horizon Cheat Sheet</div>
+        <div class="card-desc">Quick-reference for Horizon product positioning</div>
+      </a>
+      <a href="https://omnissa-my.sharepoint.com/:b:/p/dlandry/EekAS4wEOgVMtHbk_nN3JYUBm4H8i05_KebaJP5liWQG6g?e=n4xSUm" target="_blank" class="card">
+        <span class="arr">↗</span>
+        <div class="card-title">Horizon Accelerator Overview</div>
+        <div class="card-desc">Add-on for Horizon Universal — analytics + day 0–2 lifecycle support</div>
+        <span class="card-tag">Portal Login Required</span>
+      </a>
+    </div>
+
+    <div class="sub-label">Analyst Reports</div>
+    <div class="grid g3">
+      <a href="https://www.gartner.com/doc/reprints?id=1-2J5VE2HL&ct=241023&st=sb" target="_blank" class="card">
+        <span class="arr">↗</span>
+        <div class="card-title">Gartner Magic Quadrant — DaaS</div>
+        <div class="card-desc">Omnissa positioned as a Leader for Ability to Execute &amp; Completeness of Vision</div>
+      </a>
+      <a href="https://www.omnissa.com/business-value-omnissa-horizon-multicloud/" target="_blank" class="card">
+        <span class="arr">↗</span>
+        <div class="card-title">IDC — Business Value of Horizon</div>
+        <div class="card-desc">Business value of Omnissa Horizon hybrid and multicloud deployments</div>
+      </a>
+      <a href="https://www.omnissa.com/insights/omnissa-named-leader-2024-idc-marketscape-for-virtual-client-computing/" target="_blank" class="card">
+        <span class="arr">↗</span>
+        <div class="card-title">IDC MarketScape — Virtual Client Computing</div>
+        <div class="card-desc">Worldwide VCC Vendor Assessment — Omnissa named a Leader</div>
+      </a>
+    </div>
+  </div>
+
+</div><!-- /tab-sales -->
+
+
+<!-- ══════════════════════════════════════
+     TAB 2 · PARTNER PROGRAM
+══════════════════════════════════════ -->
+<div id="tab-program" class="tab-panel fade-in">
+
+  <div class="panel-hero">
+    <div class="eyebrow">Partner Program</div>
+    <h2>Benefits, incentives, and <em>program resources</em></h2>
+    <p>The Omnissa Partner Program — tiers, competencies, MDF, rewards, marketing tools, and how to maximize every dollar.</p>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="s-icon" style="background:rgba(0,102,204,0.15)">🏆</div>
+      <div class="s-title">Program Overview &amp; Tiers</div>
+      <div class="s-rule"></div>
+    </div>
+    <div class="grid g2">
+      <a href="https://omnissa.my.site.com/partnerconnect/s/omnissa-partner-program" target="_blank" class="card">
+        <span class="arr">↗</span>
+        <div class="card-title">Partner Program — Home</div>
+        <div class="card-desc">OPP program guide, tier requirements, and benefits overview</div>
+        <span class="card-tag">Portal Login Required</span>
+      </a>
+      <a href="https://omnissa-my.sharepoint.com/:w:/p/dlandry/EVN36diubjlAqiJsddBY8CkB9opq9FdOOeBwHxVamK4hOQ?e=qU0h6U" target="_blank" class="card">
+        <span class="arr">↗</span>
+        <div class="card-title">OPP Guide</div>
+        <div class="card-desc">Full partner program guide — structure, rules, and requirements</div>
+        <span class="card-tag">Portal Login Required</span>
+      </a>
+      <a href="https://omnissa.my.site.com/partnerconnect/s/partner-competencies" target="_blank" class="card">
+        <span class="arr">↗</span>
+        <div class="card-title">Partner Competencies</div>
+        <div class="card-desc">View and track competency status including Master Services Competency (MSC)</div>
+        <span class="card-tag">Portal Login Required</span>
+      </a>
+      <a href="https://omnissa.my.site.com/partnerconnect/s/account-management?component=c:PC_MSCDashboard" target="_blank" class="card">
+        <span class="arr">↗</span>
+        <div class="card-title">MSC Dashboard</div>
+        <div class="card-desc">MSC tracking — MSC partners earn the highest incentive tier</div>
+        <span class="card-tag">Portal Login Required</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="s-icon" style="background:rgba(0,196,180,0.12)">💎</div>
+      <div class="s-title">Rewards, MDF &amp; Incentives</div>
+      <div class="s-rule"></div>
+    </div>
+    <div class="grid g2">
+      <a href="https://omnissa.my.site.com/partnerconnect/s/account-management?component=c%3APC_AdPlus" target="_blank" class="card">
+        <span class="arr">↗</span>
+        <div class="card-title">Partner Rewards Program</div>
+        <div class="card-desc">Overview and tracking of sell incentives and partner-based rewards per opportunity</div>
+        <span class="card-tag">Portal Login Required</span>
+      </a>
+      <a href="https://omnissa.my.site.com/partnerconnect/s/development-funds" target="_blank" class="card">
+        <span class="arr">↗</span>
+        <div class="card-title">Marketing Development Funds (MDF)</div>
+        <div class="card-desc">Apply for and manage co-marketing investment funds</div>
+        <span class="card-tag">Portal Login Required</span>
+      </a>
+      <a href="https://omnissa.my.site.com/partnerconnect/s/assessment" target="_blank" class="card">
+        <span class="arr">↗</span>
+        <div class="card-title">Technical Assessment Incentive</div>
+        <div class="card-desc">Pre-sale incentive per qualified opportunity</div>
+        <span class="card-tag teal">Up to $10,000</span>
+      </a>
+      <a href="https://omnissa.my.site.com/partnerconnect/s/poc" target="_blank" class="card">
+        <span class="arr">↗</span>
+        <div class="card-title">Pilot Incentive</div>
+        <div class="card-desc">Post-sale incentive per qualified opportunity</div>
+        <span class="card-tag teal">Up to $12,000</span>
+      </a>
+      <a href="https://omnissa.my.site.com/partnerconnect/s/sell" target="_blank" class="card">
+        <span class="arr">↗</span>
+        <div class="card-title">Sell Incentives</div>
+        <div class="card-desc">Current sell incentive programs available to partners</div>
+        <span class="card-tag">Portal Login Required</span>
+      </a>
+    </div>
+    <div class="note">
+      📄 <a href="https://omnissa.my.site.com/partnerconnect/s/contentdocument/069Hp00000hSFBg" target="_blank">Download the Partner Rewards Overview Playbook</a> for a full breakdown of how the incentive structure works across opportunity types.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="s-icon" style="background:rgba(0,168,232,0.12)">📣</div>
+      <div class="s-title">Marketing &amp; Partner Tools</div>
+      <div class="s-rule"></div>
+    </div>
+    <div class="grid g2">
+      <a href="https://omnissa.structuredweb.com/sw/app/api/sso/redirect.aspx?idp=155925" target="_blank" class="card">
+        <span class="arr">↗</span>
+        <div class="card-title">Partner Marketing Platform (OPMP)</div>
+        <div class="card-desc">Co-branded campaign assets, demand gen content, and partner marketing tools via Structure Web</div>
+        <span class="card-tag">Portal Login Required</span>
+      </a>
+      <a href="https://learning.omnissa.com/learn/courses/1982/omnissa-partner-studios-opmp-sales-play-activation/lessons/6494/opmp-sales-play-activation-video" target="_blank" class="card">
+        <span class="arr">↗</span>
+        <div class="card-title">OPMP Sales Play Activation — How-To</div>
+        <div class="card-desc">Video walkthrough of how to use the OPMP portal and download sales play assets</div>
+        <span class="card-tag">On-Demand Video</span>
+      </a>
+      <a href="https://forms.office.com/pages/responsepage.aspx?id=HGhPibvkm0iR_71t3LCkAt7VFgV9CddPkzi0pYyY6spUNEMxRlBZT0dHV002TTJUNkZGSEVDT1BSMC4u&route=shorturl" target="_blank" class="card">
+        <span class="arr">↗</span>
+        <div class="card-title">NFR License Request</div>
+        <div class="card-desc">Request Not-For-Resale licenses for internal demo, lab, and test environments</div>
+        <span class="card-tag orange">Form — No Login</span>
+      </a>
+      <a href="https://ocp.omnissa.com/login" target="_blank" class="card">
+        <span class="arr">↗</span>
+        <div class="card-title">Omnissa Commerce Portal</div>
+        <div class="card-desc">Partner commerce and ordering portal</div>
+        <span class="card-tag">Portal Login Required</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="s-icon" style="background:rgba(0,102,204,0.1)">⚖️</div>
+      <div class="s-title">Legal &amp; Trust</div>
+      <div class="s-rule"></div>
+    </div>
+    <div class="grid g3">
+      <a href="https://www.omnissa.com/legal-center/" target="_blank" class="card">
+        <span class="arr">↗</span>
+        <div class="card-title">Legal Center</div>
+        <div class="card-desc">Agreements, terms of service, and legal documentation</div>
+        <span class="card-tag">Public</span>
+      </a>
+      <a href="https://www.omnissa.com/trust-center/security/" target="_blank" class="card">
+        <span class="arr">↗</span>
+        <div class="card-title">Security Response</div>
+        <div class="card-desc">Security advisories and vulnerability disclosures</div>
+        <span class="card-tag">Public</span>
+      </a>
+      <a href="https://docs.omnissa.com/bundle/Product-Lifecycle-Matrix/page/lifecyclematrix.html" target="_blank" class="card">
+        <span class="arr">↗</span>
+        <div class="card-title">Product Lifecycle Matrix</div>
+        <div class="card-desc">Current support status for all Omnissa product versions</div>
+        <span class="card-tag">Public</span>
+      </a>
+    </div>
+  </div>
+
+</div><!-- /tab-program -->
+
+
+<!-- ══════════════════════════════════════
+     TAB 3 · PARTNER & CUSTOMER SUPPORT
+══════════════════════════════════════ -->
+<div id="tab-support" class="tab-panel fade-in">
+
+  <div class="panel-hero">
+    <div class="eyebrow">Partner &amp; Customer Support</div>
+    <h2>Get answers and <em>resolve issues fast</em></h2>
+    <p>The right contact for every situation — from order management and billing to technical support and portal help.</p>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="s-icon" style="background:rgba(0,168,232,0.12)">🤝</div>
+      <div class="s-title">Partner Support Contacts</div>
+      <div class="s-rule"></div>
+    </div>
+    <div class="grid g2">
+      <div class="contact-card">
+        <div class="contact-role">Partner Support</div>
+        <div class="contact-email"><a href="mailto:Partner.Support@omnissa.com">Partner.Support@omnissa.com</a></div>
+        <div class="contact-note">Partner support for Partner Portal, Programs, and general questions</div>
+      </div>
+      <div class="contact-card">
+        <div class="contact-role">Order Management — AMER</div>
+        <div class="contact-email"><a href="mailto:amerom@omnissa.com">amerom@omnissa.com</a></div>
+        <div class="contact-note">Submission of manual purchase orders for fulfillment</div>
+      </div>
+      <div class="contact-card">
+        <div class="contact-role">Renewals</div>
+        <div class="contact-email"><a href="mailto:Renewals@omnissa.com">Renewals@omnissa.com</a></div>
+        <div class="contact-note">All renewal requests</div>
+      </div>
+      <div class="contact-card">
+        <div class="contact-role">Billing Ops</div>
+        <div class="contact-email"><a href="mailto:BillingOps@omnissa.com">BillingOps@omnissa.com</a></div>
+        <div class="contact-note">Billing disputes, proforma, pre-proforma</div>
+      </div>
+      <div class="contact-card">
+        <div class="contact-role">Accounts Receivable</div>
+        <div class="contact-email"><a href="mailto:AR@omnissa.com">AR@omnissa.com</a></div>
+        <div class="contact-note">Invoice requests/questions</div>
+      </div>
+      <div class="contact-card">
+        <div class="contact-role">EDU / Learning</div>
+        <div class="contact-email"><a href="mailto:learning_support@omnissa.com">learning_support@omnissa.com</a></div>
+        <div class="contact-note">EUC Learning SKU and quoting help</div>
+      </div>
+      <div class="contact-card">
+        <div class="contact-role">Distribution Transactability</div>
+        <div class="contact-email"><a href="mailto:Distribution.Ops@omnissa.com">Distribution.Ops@omnissa.com</a></div>
+        <div class="contact-note">EDI, Order Status Report, Billing PO or Proforma download, troubleshooting, and general questions tied to transacting</div>
+      </div>
+      <div class="contact-card">
+        <div class="contact-role">MSP Transactability &amp; Ops</div>
+        <div class="contact-email"><a href="mailto:ServiceProvider.Ops@omnissa.com">ServiceProvider.Ops@omnissa.com</a></div>
+        <div class="contact-note">MSP support</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="s-icon" style="background:rgba(0,196,180,0.12)">🔧</div>
+      <div class="s-title">Customer Technical Support</div>
+      <div class="s-rule"></div>
+    </div>
+    <div class="grid g2">
+      <a href="https://customerconnect.omnissa.com/home" target="_blank" class="card">
+        <span class="arr">↗</span>
+        <div class="card-title">Customer Connect Portal</div>
+        <div class="card-desc">Primary portal for customer technical support case submission and management</div>
+        <span class="card-tag">Portal Login Required</span>
+      </a>
+      <div class="card-static">
+        <div class="card-title">Phone Support</div>
+        <div class="card-desc">
+          🇺🇸 USA &nbsp;—&nbsp; <a href="tel:8887350703">(888) 735-0703</a><br>
+          🏛 US Federal &nbsp;—&nbsp; <a href="tel:8882630050">(888) 263-0050</a>
+        </div>
+      </div>
+      <a href="https://kb.omnissa.com/s/" target="_blank" class="card">
+        <span class="arr">↗</span>
+        <div class="card-title">Knowledge Base</div>
+        <div class="card-desc">Searchable KB articles, known issues, and technical guidance</div>
+        <span class="card-tag">Public</span>
+      </a>
+      <a href="https://docs.omnissa.com/" target="_blank" class="card">
+        <span class="arr">↗</span>
+        <div class="card-title">Product Documentation</div>
+        <div class="card-desc">Official product docs, release notes, and admin guides for all Omnissa products</div>
+        <span class="card-tag">Public</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="s-icon" style="background:rgba(0,102,204,0.15)">🌐</div>
+      <div class="s-title">Partner Portal &amp; Tools</div>
+      <div class="s-rule"></div>
+    </div>
+    <div class="grid g3">
+      <a href="https://omnissa.my.site.com/partnerconnect/s/partner-connect" target="_blank" class="card">
+        <span class="arr">↗</span>
+        <div class="card-title">Partner Connect — Home</div>
+        <div class="card-desc">Main partner portal for all program activities</div>
+        <span class="card-tag">Portal Login Required</span>
+      </a>
+      <a href="https://customerconnect.omnissa.com/partner-connect/configurator" target="_blank" class="card">
+        <span class="arr">↗</span>
+        <div class="card-title">Partner Configurator</div>
+        <div class="card-desc">Alternate configurator access through Customer Connect</div>
+        <span class="card-tag">Portal Login Required</span>
+      </a>
+      <a href="https://community.omnissa.com/" target="_blank" class="card">
+        <span class="arr">↗</span>
+        <div class="card-title">Omnissa Community</div>
+        <div class="card-desc">Peer community for technical discussion, questions, and shared resources</div>
+        <span class="card-tag">Public</span>
+      </a>
+    </div>
+  </div>
+
+</div><!-- /tab-support -->
+
+
+<!-- ══════════════════════════════════════
+     TAB 4 · SOLUTION & SALES EDUCATION
+══════════════════════════════════════ -->
+<div id="tab-education" class="tab-panel fade-in">
+
+  <div class="panel-hero">
+    <div class="eyebrow">Solution &amp; Sales Education</div>
+    <h2>Train, certify, and <em>stay sharp</em></h2>
+    <p>Certifications, on-demand courses, Partner Studios sessions, and technical deep-dives — everything to build confidence and credibility in front of customers.</p>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="s-icon" style="background:rgba(0,168,232,0.12)">🎓</div>
+      <div class="s-title">Certification Tracks</div>
+      <div class="s-rule"></div>
+    </div>
+    <div class="grid g2">
+      <a href="https://learning.omnissa.com/learn/courses/2028/omnissa-sales-professional" target="_blank" class="card">
+        <span class="arr">↗</span>
+        <div class="card-title">Omnissa Sales Professional (OSP)</div>
+        <div class="card-desc">Formerly VSP — foundational sales certification for all partner sellers. Start here.</div>
+        <span class="card-tag teal">Required — Sales Reps</span>
+      </a>
+      <a href="https://learning.omnissa.com/learn/courses/2029/omnissa-technical-sales-professional" target="_blank" class="card">
+        <span class="arr">↗</span>
+        <div class="card-title">Omnissa Technical Sales Professional (OTSP)</div>
+        <div class="card-desc">Formerly VTSP — for SEs and pre-sales technical staff. Pairs with OSP.</div>
+        <span class="card-tag teal">Required — Pre-Sales / SE</span>
+      </a>
+    </div>
+    <div class="note" style="margin-top:12px;">
+      📄 Certification resources: &nbsp;
+      <a href="https://community.omnissa.com/technical-blog/omnissa-certification-program-rebranded-r36/" target="_blank">Program Overview</a> &nbsp;·&nbsp;
+      <a href="https://omnissa.sharepoint.com/sites/REAL-Comms/Certification%20Resources/Forms/AllItems.aspx?id=%2Fsites%2FREAL%2DComms%2FCertification%20Resources%2FFAQ%2FOld%20Cert%20FAQ%2FOmnissa%20Cert%20FAQ%5FApr2025%2Epdf&parent=%2Fsites%2FREAL%2DComms%2FCertification%20Resources%2FFAQ%2FOld%20Cert%20FAQ&p=true&ga=1" target="_blank">Cert FAQ</a> &nbsp;·&nbsp;
+      <a href="https://omnissa.sharepoint.com/sites/REAL-Comms/Certification%20Resources/Forms/AllItems.aspx?id=%2Fsites%2FREAL%2DComms%2FCertification%20Resources%2FCert%20Catalog%2FCertification%20Prerequisites%2Epdf&parent=%2Fsites%2FREAL%2DComms%2FCertification%20Resources%2FCert%20Catalog&p=true&ga=1" target="_blank">Prerequisites</a> &nbsp;·&nbsp;
+      <a href="https://omnissa.sharepoint.com/sites/REAL-Comms/Certification%20Resources/Forms/AllItems.aspx?id=%2Fsites%2FREAL%2DComms%2FCertification%20Resources%2FOmnisaaCert%20Exam%20Guides%2FOmnissa%2DEXAM%2Dguide%2Ezip&parent=%2Fsites%2FREAL%2DComms%2FCertification%20Resources%2FOmnisaaCert%20Exam%20Guides&p=true&ga=1" target="_blank">Exam Guides</a> &nbsp;·&nbsp;
+      <a href="https://omnissa.sharepoint.com/sites/REAL-Comms/Certification%20Resources/Forms/AllItems.aspx?id=%2Fsites%2FREAL%2DComms%2FCertification%20Resources%2FPolicy%20Docs%2FOmnissa%20Testing%20Policies%20Client%20Reference%2Epdf&parent=%2Fsites%2FREAL%2DComms%2FCertification%20Resources%2FPolicy%20Docs&p=true&ga=1" target="_blank">Cert Policies</a>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="s-icon" style="background:rgba(0,102,204,0.15)">📚</div>
+      <div class="s-title">Partner University &amp; On-Demand Learning</div>
+      <div class="s-rule"></div>
+    </div>
+    <div class="grid g2">
+      <a href="https://learning.omnissa.com/pages/21/partner-university-home" target="_blank" class="card">
+        <span class="arr">↗</span>
+        <div class="card-title">Partner University — Home</div>
+        <div class="card-desc">On-demand and instructor-led courses for sales, technical, and management roles</div>
+        <span class="card-tag">Learning Platform</span>
+      </a>
+      <a href="https://learning.omnissa.com/learn" target="_blank" class="card">
+        <span class="arr">↗</span>
+        <div class="card-title">Full Course Catalog</div>
+        <div class="card-desc">All available courses, labs, and learning paths</div>
+        <span class="card-tag">Learning Platform</span>
+      </a>
+      <a href="https://learning.omnissa.com/learn/courses/1730/omnissa-partner-studios-sales-product-horizon-8-and-citrix-competitive-updates/lessons/5726/sales-product-horizon-8-and-citrix-competitive-updates" target="_blank" class="card">
+        <span class="arr">↗</span>
+        <div class="card-title">Horizon &amp; Competitive Updates — Sales Session</div>
+        <div class="card-desc">Recorded session on Horizon competitive positioning and legacy VDI switching</div>
+        <span class="card-tag">On-Demand</span>
+      </a>
+      <a href="https://learning.omnissa.com/learn/courses/1741/omnissa-partner-studios-technical-product-enablement-horizon-update/lessons/5768/technical-product-enablement-horizon-update" target="_blank" class="card">
+        <span class="arr">↗</span>
+        <div class="card-title">Horizon Technical Enablement Session</div>
+        <div class="card-desc">Technical deep-dive for SEs and pre-sales engineers</div>
+        <span class="card-tag">On-Demand</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="s-icon" style="background:rgba(0,196,180,0.12)">🛠</div>
+      <div class="s-title">TechZone, TestDrive &amp; Technical Resources</div>
+      <div class="s-rule"></div>
+    </div>
+    <div class="grid g3">
+      <a href="https://techzone.omnissa.com/" target="_blank" class="card">
+        <span class="arr">↗</span>
+        <div class="card-title">TechZone</div>
+        <div class="card-desc">Technical content, reference architectures, and tools for Horizon and Workspace ONE</div>
+        <span class="card-tag">Public</span>
+      </a>
+      <a href="https://techzone.omnissa.com/resource/workspace-one" target="_blank" class="card">
+        <span class="arr">↗</span>
+        <div class="card-title">TechZone — Workspace ONE</div>
+        <div class="card-desc">Full Workspace ONE / UEM technical resource library</div>
+        <span class="card-tag">Public</span>
+      </a>
+      <a href="https://techzone.omnissa.com/resource/horizon" target="_blank" class="card">
+        <span class="arr">↗</span>
+        <div class="card-title">TechZone — Horizon</div>
+        <div class="card-desc">Full Horizon technical resource library</div>
+        <span class="card-tag">Public</span>
+      </a>
+      <a href="https://techzone.omnissa.com/reference-architecture" target="_blank" class="card">
+        <span class="arr">↗</span>
+        <div class="card-title">Reference Architectures</div>
+        <div class="card-desc">Validated design guides for customer deployments</div>
+        <span class="card-tag">Public</span>
+      </a>
+      <a href="https://ocp.omnissa.com/login" target="_blank" class="card">
+        <span class="arr">↗</span>
+        <div class="card-title">Omnissa TestDrive</div>
+        <div class="card-desc">Hands-on demo environment — great for proof of concept with customers</div>
+        <span class="card-tag">Demo Environment</span>
+      </a>
+      <a href="https://techzone.omnissa.com/utilities" target="_blank" class="card">
+        <span class="arr">↗</span>
+        <div class="card-title">TechZone — Migrating to Horizon</div>
+        <div class="card-desc">Step-by-step migration guidance for customers making the move</div>
+        <span class="card-tag">Public</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="s-icon" style="background:rgba(0,168,232,0.12)">🎙</div>
+      <div class="s-title">Partner Studios — Upcoming Sessions</div>
+      <div class="s-rule"></div>
+    </div>
+    <div class="studio-wrap">
+      <div class="studio-note">
+        Sales sessions on Tuesdays &nbsp;·&nbsp; Technical on Wednesdays &nbsp;·&nbsp; All recorded and available on-demand &nbsp;·&nbsp;
+        Questions: <a href="/cdn-cgi/l/email-protection#bbd7dedac9d5d2d5dce4c8cecbcbd4c9cffbd4d6d5d2c8c8da95d8d4d6"><span class="__cf_email__" data-cfemail="94f8f1f5e6fafdfaf3cbe7e1e4e4fbe6e0d4fbf9fafde7e7f5baf7fbf9">[email&#160;protected]</span></a>
+      </div>
+      <table class="studio-table">
+        <thead>
+          <tr><th>Date</th><th>Time</th><th>Session</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>May 20</td><td>10:00am EST</td>
+            <td><a href="https://learning.omnissa.com/learn/course/view/classroom/2092/omnissa-partner-studio-omnissa-at-nutanix-next" target="_blank">Omnissa at Nutanix .Next</a></td>
+          </tr>
+          <tr>
+            <td>May 21</td><td>10:00am EST</td>
+            <td><a href="https://learning.omnissa.com/learn/course/view/classroom/2102/omnissa-partner-studio-sfdc-enhancements-for-auto-classification-opportunity-management" target="_blank">SFDC Enhancements for Auto-Classification &amp; Opportunity Management</a></td>
+          </tr>
+          <tr>
+            <td>Jun 4</td><td>10:00am EST</td>
+            <td><a href="https://learning.omnissa.com/learn/course/view/classroom/2094/omnissa-partner-studio-partner-brand-training-101" target="_blank">Partner Brand Training 101</a></td>
+          </tr>
+          <tr>
+            <td>Jun 10</td><td>10:00am EST</td>
+            <td><a href="https://learning.omnissa.com/learn/course/view/classroom/2136/omnissa-partner-studio-apps-essentials-is-here-learn-how-to-sell-app-management-for-any-windows-endpoint" target="_blank">Apps Essentials — Sell App Management for Any Windows Endpoint</a></td>
+          </tr>
+          <tr>
+            <td>Jun 17</td><td>10:00am EST</td>
+            <td><a href="https://learning.omnissa.com/learn/courses/2138/omnissa-partner-studio-horizon-citrix-compete" target="_blank">Legacy VDI Modernization — Horizon Competitive Positioning</a></td>
+          </tr>
+          <tr>
+            <td>Jul 10</td><td>10:00am EST</td>
+            <td><a href="https://learning.omnissa.com/learn/course/view/classroom/2153/omnissa-partner-studio-an-overview-of-service-delivery-kits" target="_blank">An Overview of Services Delivery Kits</a></td>
+          </tr>
+          <tr>
+            <td>Jul 15</td><td>10:00am EST</td>
+            <td><a href="https://learning.omnissa.com/learn/course/view/classroom/2154/omnissa-partner-studio-dex-in-focus-dex-for-horizon-gartner-mq-and-competitive-overview" target="_blank">DEX in Focus: DEX for Horizon, Gartner MQ &amp; Competitive Overview</a></td>
+          </tr>
+          <tr>
+            <td>Jul 22</td><td>10:00am EST</td>
+            <td><a href="https://learning.omnissa.com/learn/course/view/classroom/2137/omnissa-partner-studio-omnissa-partner-marketing-portal-opmp-brand-training-20" target="_blank">OPMP Partner Marketing Portal — Brand Training 2.0</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <a href="https://learning.omnissa.com/pages/121/omnissa-partner-studios" target="_blank" class="fw-card">
+      <div>
+        <div class="fw-title">📺 View All Partner Studios &amp; Register</div>
+        <div class="fw-desc">Full catalog, upcoming registration links, and all on-demand recordings</div>
+      </div>
+      <div class="fw-go">Open →</div>
+    </a>
+  </div>
+
+</div><!-- /tab-education -->
+
+</div><!-- /container -->
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-note">Partner Hub &nbsp;·&nbsp; For authorized partner sellers &nbsp;·&nbsp; Content subject to change — check Partner Connect for latest program details</div>
+      <div class="footer-links">
+        <a href="https://www.omnissa.com" target="_blank">Omnissa.com</a>
+        <a href="https://omnissa.my.site.com/partnerconnect/s/partner-connect" target="_blank">Partner Connect</a>
+        <a href="https://techzone.omnissa.com" target="_blank">TechZone</a>
+        <a href="https://customerconnect.omnissa.com/home" target="_blank">Customer Support</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.tab-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var name = btn.getAttribute('data-tab');
+        document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
+        document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+        var panel = document.getElementById('tab-' + name);
+        panel.classList.add('active');
+        panel.classList.remove('fade-in');
+        void panel.offsetWidth;
+        panel.classList.add('fade-in');
+        btn.classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    });
+  });
+</script>
+
+</body>
+</html>
